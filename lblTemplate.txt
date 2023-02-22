@@ -1,0 +1,24 @@
+
+^XA
+#label darkness 0-30
+~SD20
+#label offset width,height
+^LH110,10^MTT
+^FO0,0
+^AS
+^FD$lblTitle^FS
+^FO0,35
+^AQ
+^FD$hostName ^FS
+^FO10,150
+^AS
+^FD$barCode^FS
+^FO0,65
+^GB200,2,2
+^FS
+^BY2,3,105
+^FT20,150
+^BCN,80,N,N
+^FD>;$barCode^FS
+^PQ$numCopies
+^XZ
