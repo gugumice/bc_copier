@@ -7,8 +7,13 @@ systemctl enable barcode.service
 systemctl disable firstboot.service
 raspi-config --expand-rootfs > /dev/null
 CURRENT_HOSTNAME=$(cat /proc/sys/kernel/hostname)
-IPO=$(ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1 |  cut -d. -f2);
-NEW_HOSTNAME="rpi-bc-"$IPO
+
+if [ -e /sys/class/net/eth0 ]; then
+      MAC=$(cat /sys/class/net/eth0/address | tr -d ":")
+else
+      MAC=$(cat /sys/class/net/wlan0/address | tr -d ":")
+fi
+NEW_HOSTNAME="rpi-bc1-"${MAC: -5}
 echo $CURRENT_HOSTNAME
 echo $NEW_HOSTNAME
 sleep 1
