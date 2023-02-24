@@ -58,7 +58,7 @@ def main():
     #Read from config file
     config = bcconf.read_config(args.config)
     init_bc()
-    print(config)
+    #print(config)
     bcrObj=barCodeReader(port=config['bc_port'], timeout = config['bc_timeout'],)
     bcrObj.start()
     prnObj=kioPrinter(json.loads(config['printers']),testpage=False)

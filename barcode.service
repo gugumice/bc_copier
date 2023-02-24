@@ -1,6 +1,5 @@
 [Unit]
 Description=Barcode copier
-After=network.target
 
 [Service]
 #Type=idle
