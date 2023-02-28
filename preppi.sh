@@ -7,7 +7,7 @@ apt-get update && apt-get -y upgrade
 ln /opt/bc/barcode.service /lib/systemd/system/barcode.service
 ln /opt/bc/firstboot.service /lib/systemd/system/firstboot.service
 ln /opt/bc/bc.ini /home/pi/bc.ini
-
+ln /opt/bc/lblTemplate.txt /home/pi/lblTemplate.txt
 systemctl enable firstboot.service
 timedatectl set-timezone Europe/Riga
 sed -i '/^# Additional overlays.*/a dtoverlay=pi3-disable-wifi\ndtoverlay=pi3-disable-bt' /boot/config.txt
