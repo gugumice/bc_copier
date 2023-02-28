@@ -27,4 +27,5 @@ echo '10.100.20.104   laiks.egl.local' >> /etc/hosts
 chattr +i /etc/hosts
 pip3 --no-input install pyserial configparser
 pip3 --no-input install pycups
+pip3 --no-input install zebra
 #/usr/sbin/shutdown -r now
