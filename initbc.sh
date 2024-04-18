@@ -16,4 +16,5 @@ NEW_HOSTNAME="rpi-bc1-"${MAC: -5}
 echo $CURRENT_HOSTNAME to $NEW_HOSTNAME
 sleep 1
 hostnamectl set-hostname ${NEW_HOSTNAME} --static
+sleep 1
 /sbin/shutdown -r now
