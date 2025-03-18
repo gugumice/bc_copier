@@ -1,0 +1,16 @@
+[Unit]
+Description=Barcode copier
+
+[Service]
+#Type=idle
+Environment="SCRIPT_ARGS=-c /opt/bc/bc.ini"
+ExecStart=/opt/bc/bin/python /opt/bc/bc.py
+WorkingDirectory=/opt/bc/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+Group=bc
+
+[Install]
+WantedBy=multi-user.target

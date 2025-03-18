@@ -1,0 +1,30 @@
+
+^XA
+#label darkness 0-30
+~SD20
+#label offset width,height
+^LH60,10^MTT
+^FO10,0
+^AS
+^FD$label_title^FS
+
+^FO30,155
+^AS
+^FD$label_barcode^FS
+
+^FO0,70
+^GB200,2,2
+^FS
+^BY2,3,105
+
+
+^FT20,155
+^BCN,80,N,N
+^FD>;$label_barcode^FS
+
+^FO175,5
+^B0N,4,Y,N
+^FD$label_barcode $label_aztec_code^F
+
+^PQ$label_number_of_copies
+^XZ

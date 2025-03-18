@@ -1,0 +1,45 @@
+^XA
+    ^XA
+    #label darkness 0-30
+    ~SD20
+    #label offset width,height
+    ^LH70,10^MTT
+    ^FO0,0
+    ^AS
+    ^FD$label_dept_name^FS
+    #Line
+    ^FO0,35
+    ^GB300,2,2
+    ^FS
+
+    ^BY2,3,105
+    ^FT20,150
+    ^BCN,80,N,N
+    #Bar Code
+    ^FO10,40
+    ^AS
+    ^FD$label_barcode^FS
+    #Bar code label
+    ^FO10,120
+    ^AS
+    ^FD$label_barcode^FS
+    
+    #Line
+    ^FO0,153
+    ^GB300,2,2
+    ^FS
+    
+    ^FO0,155
+    ^AQ
+    ^FD$label_content0^FS
+
+    ^FO0,180
+    ^AQ
+    ^FD$label_content1^FS
+    
+    ^FO0,205
+    ^AQ
+    ^FD$label_content2^FS
+
+    ^PQ$label_copies
+    ^XZ
