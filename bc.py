@@ -109,7 +109,6 @@ def main():
     if config['watchdog_path']:
         try:
             wd = open(config['watchdog_path'], 'w')
-            logger.info
             logging.info("Watchdog enabled on {}".format(config['watchdog_path']))
         except Exception as e:
             logging.error(e)
