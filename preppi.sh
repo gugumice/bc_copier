@@ -4,11 +4,6 @@ systemctl disable bluetooth.service
 systemctl disable hciuart.service
 apt-get update && apt-get -y upgrade
 
-mkdir /var/log/bc
-touch /var/log/bc/bc.log
-chown -R pi:kiosk /var/log/kiosk
-
-ln -s /var/log/bc/bc.log /home/pi/bc.log
 ln /opt/bc/barcode.service /lib/systemd/system/barcode.service
 ln /opt/bc/firstboot.service /lib/systemd/system/firstboot.service
 ln /opt/bc/bc.ini /home/pi/bc.ini
