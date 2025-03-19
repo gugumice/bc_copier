@@ -35,6 +35,24 @@ def print_labels(zpl_text)->int:
     print_job_id = conn.printFile(printer = label_printer, filename = temp_file.name,title = 'Report',options ={'print-color-mode': 'monochrome'})
     return(print_job_id)
 
+def make_prefixes(prefix_template_file:str)->str:
+    '''
+    Makes ZPL script to prefix labels
+    Returns: ZPL II scropt for Zebra printers
+    '''
+    global config
+    zpl_text = None
+    try:
+        with open(prefix_template_file) as f:
+            t = f.read()
+    except Exception as e:
+        logging.error(e)
+        return(None)
+    label_template = Template(t)
+    for p in config['prefixes']:
+        zpl_text = label_template.safe_substitute(prefix = p)
+        print_labels(zpl_text)
+
 def make_labels(barcode:str, label_template_file:str)->str:
     '''
     Makes ZPL script to print labels
@@ -58,12 +76,12 @@ def make_labels(barcode:str, label_template_file:str)->str:
         bc.append(barcode[1:])
         bc.append(config['bc_default_sample_type'])
     if label_prefix:
-        bc[0] = '{}{}'.format(label_prefix,bc[0])
+        #Add prefix
+        bc[0] = '{}{}'.format(label_prefix[-2:],bc[0])
     zpl_text = label_template.safe_substitute(label_title = config['label_title'],
                                               label_barcode = bc[0],
-                                              label_aztec_code = bc[1],
+                                              label_sample_type = bc[1],
                                               label_number_of_copies = config['label_number_of_copies'])
-
     return(zpl_text)
 
 def bc_callback(barcode)->None:
@@ -73,8 +91,7 @@ def bc_callback(barcode)->None:
     global config, conn, label_prefix
     logging.debug(f'Barcode scanned: {barcode}')
     if re.fullmatch(config['bc_prefix_regex'], barcode):
-        print(f'Prefix: {barcode}')
-        label_prefix = barcode[1:]
+        label_prefix = barcode
     elif re.fullmatch(config['bc_regex'], barcode):
         # print(barcode, type(barcode))
         zpl_text = (make_labels(barcode, config['label_template_file']))
@@ -117,6 +134,9 @@ def main():
     #Check & set printer 
     conn = cups.Connection()
     setup_printer(conn=conn, include_schemes = config['include_schemes'], driver_list = config['driver_list'])
+    if os.path.isfile('{}/{}'.format(run_directory,config['prefix_template_file'])):
+        make_prefixes('{}/{}'.format(run_directory,config['prefix_template_file']))
+        os.rename('{}/{}'.format(run_directory,config['prefix_template_file']), '{}/{}.bak'.format(run_directory,config['prefix_template_file']))
     #init barcode reader object
     barcode_reader = BarcodeReader(port=config['bc_port'],
                                    timeout=config['bc_reader_timeout'],
@@ -130,7 +150,6 @@ def main():
         #If bc_reader_reset timer exceeded, set to strait copy mode
         if bc_reader_reset and time.time() > bc_reader_reset + config['bc_reader_reset']:
             bc_reader_reset = None
-            label_tests = None
             logging.info('Mode set to: copy')
             #Pat watchdog
         if wd is not None: print('1',file = wd, flush = True)
