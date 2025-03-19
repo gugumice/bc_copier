@@ -9,7 +9,6 @@ def read_configuration(config_file:str) -> dict:
  
     Args:
         configuration file
-
     Returns dict with configuration settings
     '''
     # Default config values
@@ -19,6 +18,7 @@ def read_configuration(config_file:str) -> dict:
         'logging_level': 'INFO',
         'label_template_file': 'label_template.txt',
         'label_number_of_copies': 1,
+        'prefix_template_file': 'prefix_template.txt',
         'bc_port': '/dev/ttyACM0',
         'bc_reader_timeout': 1,
         'bc_reader_debounce': 1.5,
@@ -27,9 +27,9 @@ def read_configuration(config_file:str) -> dict:
         'driver_list': {'Zebra':'Raw'},
         'barcode_regex': '^#\d{7,9}$',
         'barcode_prefix_regex': '^#\d{2}$',
+        'prefixes': ['01','02'],
         'bc_default_sample_type': ''
         }
-
     if not os.path.isfile(config_file):
         logging.critical("Config file {} does not exist!".format(config_file))
         return(None)
@@ -37,7 +37,6 @@ def read_configuration(config_file:str) -> dict:
                         converters={'list': lambda x: [int(i.strip()) for i in x.split(',')],
                                     'list_s' : lambda x: [i.strip() for i in x.split(',')]})
     config.read(config_file)
-
     #Get values from ini file line by line to catch errors in config file
     commands = (
         "bcr_config['watchdog_path'] = config.get('WATCHDOG','watchdog_path')",
@@ -45,6 +44,8 @@ def read_configuration(config_file:str) -> dict:
         "bcr_config['label_title'] = config.get('INFO','label_title')",
         "bcr_config['label_template_file'] = config.get('LABEL','label_template_file')",
         "bcr_config['label_number_of_copies'] = config.getint('LABEL','label_number_of_copies')",
+        "bcr_config['prefix_template_file'] = config.get('LABEL','prefix_template_file')",
+        "bcr_config['prefixes'] = config.getlist_s('LABEL','prefixes')",
         "bcr_config['bc_reader_port'] = config.get('BARCODE','bc_reader_port')",
         "bcr_config['bc_reader_timeout'] = config.getfloat('BARCODE','bc_reader_timeout')",
         "bcr_config['bc_reader_debounce'] = config.getfloat('BARCODE','bc_reader_debounce')",
@@ -54,7 +55,6 @@ def read_configuration(config_file:str) -> dict:
         "bcr_config['prn_driver_list'] = config.getlist_s('PRINTER','prn_driver_list')",
         "bcr_config['prn_include_schemes'] = config.getlist_s('PRINTER','prn_include_schemes')",
     )
-
     for command in commands:
         try:
             exec(command)
